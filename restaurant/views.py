@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
 
 from .models import Menu, Booking
@@ -29,7 +30,6 @@ class SingleMenuItemView(APIView):
         serializer = MenuSerilializer(item)
         return Response({ 'status': 'success', 'data': serializer.data })
         
-        
 class BookingView(APIView):
     def get(self, request):
         items = Booking.objects.all()
@@ -43,3 +43,7 @@ class BookingView(APIView):
             serializer.save()
             return Response({ 'status': 'success', 'data': serializer.data })
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+    
+class BookingViewSet(ModelViewSet):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerilializer
